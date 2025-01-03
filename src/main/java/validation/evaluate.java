@@ -28,7 +28,7 @@ public class evaluate extends applyOp{
             if (inputArr[i] == ' ') {
                 continue;
             }
-            if (Validation.hasValidCharsOnly(String.valueOf(inputArr[i])) == false) {return Error_StringNotValidation.ordinal();}
+          //  if (!Validation.isAllowedChar(inputArr[i])) {return Error_StringNotValidation;}
             // провести валидацию на ошибки в строке
             if (inputArr[i] >= '0' && inputArr[i] <= '9') {
                 // if the character is a digit, push it onto the operands stack

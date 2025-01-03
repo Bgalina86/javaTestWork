@@ -101,7 +101,7 @@ public class Validation {
      * @param line
      * @return false или true
      */
-    public static boolean hasValidCharsOnly(String line) {
+    private static boolean hasValidCharsOnly(String line) {
         for (int i = 0; i < line.length(); i++) {
             char sym = line.charAt(i);
             if (!isAllowedChar(sym))
@@ -128,35 +128,30 @@ public class Validation {
         int amountOfLetterRus = 0;       // Число встречаемых символов кириллицы
         int amountOfLetterEng = 0;     //
         int amountOfSpecialSymbol = 0; //
-        //
-        // В цикле проходим по строке, считаем цифры и знаки операции
-        //
+
         for (int i = 0; i < password.length(); i++) {
             char currChar = password.charAt(i);
-            if (Character.isDigit(
-                    currChar) || isOperationsChars(currChar)) {
-                return null;// isDigit - проверка кода символа на отношения к цифрам amountOfDigits++;
-            } else {
-                return Error_StringNotValidation;
-            }
-
-//            if (isSpecialSymbol(currChar)){amountOfSpecialSymbol++;}
-//            if (isOperationsChars(currChar)){amountOfOperationChars++;}
-//            if (isLetterRus(currChar)){amountOfLetterRus++;}
-//            if (isLetterEng(currChar)){amountOfLetterEng++;}
+            if ((Character.isDigit(currChar) || isOperationsChars(currChar))
+                && !isLetterEng(currChar) && !isLetterRus(currChar) && !isSpecialSymbol(currChar)){
+                if (Character.isDigit(currChar)){amountOfDigits++;}
+                if (isOperationsChars(currChar)) {amountOfOperationChars++;}
+                return null;
+            } else if (isSpecialSymbol(currChar)){amountOfSpecialSymbol++;}
+              else if (isLetterRus(currChar)){amountOfLetterRus++;}
+              else if (isLetterEng(currChar)){amountOfLetterEng++;}
+            return Error_StringNotValidation;
         }
-        for (int i = 0; i < kOperationsChars.length(); i++) {
-            char currOperation = kOperationsChars.charAt(i);
-            String[] name1 = stringSplit(password, String.valueOf(currOperation));
-            System.out.println(name1);
-        }
+//        for (int i = 0; i < kOperationsChars.length(); i++) {
+//            char currOperation = kOperationsChars.charAt(i);
+//            String[] name1 = stringSplit(password, String.valueOf(currOperation));
+//            System.out.println(name1);
+//        }
         if (amountOfSpecialSymbol != 0) {
             return Error_SpecialChar;
         }
         if (amountOfOperationChars == 0) {
             return Error_NoOperationsChars;
-        }
-        if (amountOfOperationChars > 1) {
+        } else if (amountOfOperationChars > 1) {
             return Error_OperationsCharsMin;
         }
         if (amountOfLetterRus != 0) {
@@ -185,14 +180,14 @@ public class Validation {
 
     /**
      * Разбиваем на лексемы относительно математических операций
-     * @param password введенная страка
+     * @param password введенная строка
      * @return разбивает на лексемы или возвращаем false
      */
     private static boolean stringSplitST(String password) {
         for (int i = 0; i < kOperationsChars.length(); i++) {
             char currOperation = kOperationsChars.charAt(i);
             String[] name1 = stringSplit(password, String.valueOf(currOperation));
-            // проверка лексемы на на личие не допустимых символов
+            // проверка лексемы на на личные не допустимых символов
             System.out.println(name1);
         }
         return false;
